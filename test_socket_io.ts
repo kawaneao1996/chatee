@@ -1,4 +1,5 @@
-Deno.serve((req) => {
+const port = 3000;
+Deno.serve({ port }, (req) => {
   if (req.headers.get("upgrade") != "websocket") {
     return new Response(null, { status: 501 });
   }
