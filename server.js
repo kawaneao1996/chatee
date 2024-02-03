@@ -20,7 +20,7 @@ function broadcast_usernames() {
   const usernames = [...connectedClients.keys()];
   console.log(
     "Sending updated username list to all clients: " +
-      JSON.stringify(usernames),
+    JSON.stringify(usernames),
   );
   broadcast(
     JSON.stringify({
