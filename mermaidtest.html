@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+        mermaid.initialize({ startOnLoad: true });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            mermaid.init();
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="mermaid">
+        <!-- メルメイドのコードをここに挿入 -->
+        sequenceDiagram
+        participant Server as サーバー
+        participant Client as クライアント
+
+        Client->>Server: 接続要求
+        Server->>Server: 接続を確立
+        Server-->>Client: 接続確認
+
+        loop メッセージ送信ループ
+        Client->>Server: メッセージ送信
+        Server-->>Client: メッセージ受信
+        end
+
+        Client->>Server: 接続終了要求
+        Server-->>Client: 接続終了確認
+        Server->>Server: 接続を終了
+    </div>
+
+</body>
+
+</html>
