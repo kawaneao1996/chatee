@@ -18,7 +18,9 @@ type Message = { userId: string; userName: string; message?: string };
  */
 function getFirstMessages(): Message[]{
   return [
-    { userId: "server", userName: "server", message: "welcome" },
+    { userId: "server", userName: "server", message: "ようこそ" },
+    { userId: "server", userName: "server", message: "チャットが機能してるかな？"},
+    { userId: "server", userName: "server", message: "これからデータベースを組み込むよ！"},
   ];
 }
 
@@ -28,11 +30,11 @@ io.on("connection", (socket) => {
   // ユーザーの初期画面に表示するメッセージを送信
   socket.emit("messages", getFirstMessages());
 
-  socket.emit("message", {
-    userId: "server",
-    userName: "server",
-    message: "welcome",
-  });
+  // socket.emit("message", {
+  //   userId: "server",
+  //   userName: "server",
+  //   message: "welcome",
+  // });
 
   socket.on("disconnect", (reason) => {
     console.log(`socket ${socket.id} disconnected due to ${reason}`);
@@ -41,6 +43,7 @@ io.on("connection", (socket) => {
   socket.on("message", (message) => {
     console.log(`socket ${socket.id} sent message ${message.message}`);
     socket.emit("message", message);
+    socket.broadcast.emit("message", message);
   });
 });
 
