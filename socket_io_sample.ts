@@ -10,8 +10,23 @@ const io = new Server({
   pingInterval: 5000,
 });
 
+type Message = { userId: string; userName: string; message?: string };
+
+/**
+ * 接続したユーザーに最初に送るメッセージを取得する
+ * @returns {Message[]} - welcome messages
+ */
+function getFirstMessages(): Message[]{
+  return [
+    { userId: "server", userName: "server", message: "welcome" },
+  ];
+}
+
 io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
+
+  // ユーザーの初期画面に表示するメッセージを送信
+  socket.emit("messages", getFirstMessages());
 
   socket.emit("message", {
     userId: "server",
