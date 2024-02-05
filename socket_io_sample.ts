@@ -16,25 +16,33 @@ type Message = { userId: string; userName: string; message?: string };
  * 接続したユーザーに最初に送るメッセージを取得する
  * @returns {Message[]} - welcome messages
  */
-function getFirstMessages(): Message[]{
+function getFirstMessages(): Message[] {
   return [
     { userId: "server", userName: "server", message: "ようこそ" },
-    { userId: "server", userName: "server", message: "チャットが機能してるかな？"},
-    { userId: "server", userName: "server", message: "これからデータベースを組み込むよ！"},
+    {
+      userId: "server",
+      userName: "server",
+      message: "チャットが機能してるかな？",
+    },
+    {
+      userId: "server",
+      userName: "server",
+      message: "これからデータベースを組み込むよ！",
+    },
+    {
+      userId: "server",
+      userName: "server",
+      message: "そうするとメッセージが永続化されるようになるね！",
+    },
   ];
 }
 
 io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
-
-  // ユーザーの初期画面に表示するメッセージを送信
-  socket.emit("messages", getFirstMessages());
-
-  // socket.emit("message", {
-  //   userId: "server",
-  //   userName: "server",
-  //   message: "welcome",
-  // });
+  // 接続時にユーザーにメッセージを送信
+  const messages = getFirstMessages();
+  socket.emit("messages", messages);
+  console.log(`socket ${socket.id} sent messages ${messages}`);
 
   socket.on("disconnect", (reason) => {
     console.log(`socket ${socket.id} disconnected due to ${reason}`);
