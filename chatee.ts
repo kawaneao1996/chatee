@@ -51,14 +51,21 @@ async function getFirstMessages(): Promise<Message[]> {
 
     // Encode the result as JSON
     // const messages : Message[]  = await JSON.stringify(result.rows, null, 2);
-
-    return [] as Message[];
+    const tmp = (result.rows as {id: number, user_id: string, user_name: string, message:string}[]);
+    const first_messages = tmp.map((message) => {
+        return {
+            userId: message.user_id,
+            userName: message.user_name,
+            message: message.message,
+        };
+    });
+    return first_messages as Message[];
 }
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log(`socket ${socket.id} connected`);
   // 接続時にユーザーにメッセージを送信
-  const messages = getFirstMessages();
+  const messages = await getFirstMessages();
   socket.emit("messages", messages);
   console.log(`socket ${socket.id} sent messages ${messages}`);
 
