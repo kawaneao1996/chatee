@@ -4,6 +4,7 @@ import * as postgres from "https://deno.land/x/postgres@v0.14.2/mod.ts";
 
 // Get the connection string from the environment variable "DATABASE_URL"
 const databaseUrl = Deno.env.get("DATABASE_URL")!;
+console.log(`databaseUrl: ${databaseUrl}`);
 
 // Create a database pool with three connections that are lazily established
 const pool = new postgres.Pool(databaseUrl, 5, true);
@@ -62,12 +63,25 @@ async function getFirstMessages(): Promise<Message[]> {
     return first_messages as Message[];
 }
 
+// offsetの値を取得する
+async function getOffset(): Promise<number> {
+    const result = await connection.queryObject`
+        SELECT MAX(id) FROM messages
+    `;
+    console.log("***offset_result***");
+    console.log(result);
+    console.log("***offset_result***");
+    console.log("offset_result.rows[0].max",(result.rows[0] as {max: number}).max);
+    return (result.rows[0] as {max: number}).max;
+}
+
 io.on("connection", async (socket) => {
   console.log(`socket ${socket.id} connected`);
   // 接続時にユーザーにメッセージを送信
   const messages = await getFirstMessages();
-  socket.emit("messages", messages);
-  console.log(`socket ${socket.id} sent messages ${messages}`);
+  offset = await getOffset();
+  socket.emit("messages", messages,offset);
+  console.log(`socket ${socket.id} sent messages ${messages},and offset ${offset}`);
 
   socket.on("disconnect", (reason) => {
     console.log(`socket ${socket.id} disconnected due to ${reason}`);
@@ -80,14 +94,7 @@ io.on("connection", async (socket) => {
         result = await connection.queryObject`
             INSERT INTO messages (user_name, user_id, message) VALUES (${message.userName}, ${message.userId} , ${message.message})
         `;
-        // offsetにデータベースの最後のIDを設定する
-        const offset_result = await connection.queryObject`
-            SELECT MAX(id) FROM messages
-        `;
-        console.log("***offset_result***");
-        console.log(offset_result);
-        console.log("***offset_result***");
-        offset = (offset_result.rows[0] as {max: number}).max;
+        offset = await getOffset();
     }catch(e){
         console.log(e);
         return;

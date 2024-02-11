@@ -2,9 +2,10 @@
   "deploy": {
     "project": "811d4008-19be-45ab-bc3b-e908264b5b78",
     "exclude": [
+      "**/node_modules",
       "**/node_modules"
     ],
     "include": [],
-    "entrypoint": "test_socket_io.ts"
+    "entrypoint": "chatee.ts"
   }
 }
