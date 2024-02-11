@@ -34,6 +34,7 @@ const io = new Server({
 });
 
 type Message = { userId: string; userName: string; message?: string };
+let offset = 0;
 
 /**
  * 接続したユーザーに最初に送るメッセージを取得する
@@ -44,7 +45,9 @@ async function getFirstMessages(): Promise<Message[]> {
     const result = await connection.queryObject`
         SELECT * FROM messages
     `;
+    console.log("***result.rows***");
     console.log(result.rows);
+    console.log("***result.rows***");
 
     // Encode the result as JSON
     // const messages : Message[]  = await JSON.stringify(result.rows, null, 2);
@@ -70,14 +73,24 @@ io.on("connection", (socket) => {
         result = await connection.queryObject`
             INSERT INTO messages (user_name, user_id, message) VALUES (${message.userName}, ${message.userId} , ${message.message})
         `;
+        // offsetにデータベースの最後のIDを設定する
+        const offset_result = await connection.queryObject`
+            SELECT MAX(id) FROM messages
+        `;
+        console.log("***offset_result***");
+        console.log(offset_result);
+        console.log("***offset_result***");
+        offset = (offset_result.rows[0] as {max: number}).max;
     }catch(e){
         console.log(e);
         return;
     }
     // 送信されたメッセージを送信者に返信する。またメッセージのIDを返信する
+    console.log("***result***");
     console.log(result);
-    socket.emit("message", message);
-    socket.broadcast.emit("message", message);
+    console.log("***result***");
+    socket.emit("message", message, offset);
+    socket.broadcast.emit("message", message, offset);
   });
 });
 
