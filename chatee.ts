@@ -46,9 +46,9 @@ async function getFirstMessages(): Promise<Message[]> {
     const result = await connection.queryObject`
         SELECT * FROM messages
     `;
-    console.log("***result.rows***");
-    console.log(result.rows);
-    console.log("***result.rows***");
+    // console.log("***result.rows***");
+    // console.log(result.rows);
+    // console.log("***result.rows***");
 
     // Encode the result as JSON
     // const messages : Message[]  = await JSON.stringify(result.rows, null, 2);
@@ -72,7 +72,7 @@ async function getOffset(): Promise<number> {
     console.log(result);
     console.log("***offset_result***");
     console.log("offset_result.rows[0].max",(result.rows[0] as {max: number}).max);
-    return (result.rows[0] as {max: number}).max;
+    return (result.rows[0] as {max: number}).max || 0;
 }
 
 io.on("connection", async (socket) => {
@@ -100,9 +100,9 @@ io.on("connection", async (socket) => {
         return;
     }
     // 送信されたメッセージを送信者に返信する。またメッセージのIDを返信する
-    console.log("***result***");
-    console.log(result);
-    console.log("***result***");
+    // console.log("***result***");
+    // console.log(result);
+    // console.log("***result***");
     socket.emit("message", message, offset);
     socket.broadcast.emit("message", message, offset);
   });
