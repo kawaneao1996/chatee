@@ -24,7 +24,7 @@ io.on("connection", async (socket) => {
   offset = await getOffset();
   socket.emit("messages", messages, offset);
   console.log(
-    `socket ${socket.id} sent messages ${messages},and offset ${offset}`,
+    `socket ${socket.id} sent first messages, and offset ${offset}`,
   );
 
   socket.on("disconnect", (reason) => {
