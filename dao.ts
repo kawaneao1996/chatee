@@ -40,11 +40,11 @@ export async function initMessageTable() {
  * @returns {number} - offset
  */
 export async function getOffset(): Promise<number> {
-    const result = await connection.queryObject`
+  const result = await connection.queryObject`
           SELECT MAX(id) FROM messages
       `;
-    return (result.rows[0] as { max: number }).max || -1;
-  }
+  return (result.rows[0] as { max: number }).max || -1;
+}
 
 /**
  * 最新の30件のメッセージとoffsetを取得する
@@ -73,13 +73,13 @@ export async function getFirstMessages(): Promise<
  * @returns {Promise<boolean>} - 追加に成功したかどうか
  */
 export async function addMessage(message: Message): Promise<boolean> {
-    try {
-        await connection.queryObject`
+  try {
+    await connection.queryObject`
             INSERT INTO messages (user_name, user_id, message) VALUES ($(message.userName), $(message.userId), $(message.message))
-        `
-        return true;
-    }catch(e){
-        console.log(e);
-        return false;
-    }
+        `;
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 }
