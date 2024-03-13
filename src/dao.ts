@@ -26,7 +26,7 @@ export async function initMessageTable() {
         id SERIAL PRIMARY KEY,
         user_id TEXT NOT NULL,
         user_name TEXT NOT NULL,
-        message TEXT NOT NULL,
+        message TEXT NOT NULL
       )
     `;
   } finally {

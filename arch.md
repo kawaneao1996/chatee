@@ -45,3 +45,9 @@ sequenceDiagram
 
 
 ## クライアント側の処理
+
+## デプロイ
+```shell
+./set_env.sh
+deployctl deploy --project=empty-owl-26 ./chatee.ts
+```
