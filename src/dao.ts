@@ -1,5 +1,7 @@
 import * as postgres from "https://deno.land/x/postgres@v0.14.2/mod.ts";
-const databaseUrl = Deno.env.get("DATABASE_URL")!;
+import { load } from "https://deno.land/std@0.220.0/dotenv/mod.ts";
+const env = await load();
+const databaseUrl = env["DATABASE_URL"];
 const pool = new postgres.Pool(databaseUrl, 5, true);
 
 const connection = await pool.connect();
