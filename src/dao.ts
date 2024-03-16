@@ -38,7 +38,7 @@ export async function initMessageTable() {
 
 /**
  * offsetを取得する
- * @returns {number} - offset
+ * @returns {Promise<number>} - offset
  */
 export async function getOffset(): Promise<number> {
   const result = await connection.queryObject`
@@ -49,7 +49,7 @@ export async function getOffset(): Promise<number> {
 
 /**
  * 最新の30件のメッセージとoffsetを取得する
- * @returns {Message[], offset} - welcome messages
+ * @returns {Promise<Message[], offset>} - welcome messages
  */
 export async function getFirstMessages(): Promise<
   { messages: Message[]; offset: number }
