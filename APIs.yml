@@ -1,0 +1,83 @@
+swagger: "2.0"
+info:
+  title: "API"
+  version: "1.0.0"
+paths:
+  /api/v1/Question/names:
+    get:
+      tags: ["Question"]
+      summary: "Get all question names"
+      operationId: "getQuestionNames"
+      produces: ["application/json"]
+      responses:
+        "200":
+          description: "response of available question names"
+          schema: 
+            type: array
+            items: 
+              type: string
+  /api/v1/Question/{name}:
+    get:
+      tags: ["Question"]
+      summary: "Get question by name"
+      operationId: "getQuestionByName"
+      produces: ["application/json"]
+      parameters:
+        - name: "name"
+          in: "path"
+          description: "title of the questions"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "response of question's id, sentence and answers"
+          schema:
+            type: "object"
+            properties:
+              questions: 
+                type: array
+                items: 
+                  type: "object"
+                  properties:
+                    sentence: 
+                      type: string
+                    answers: 
+                      type: array
+                      items: 
+                        type: string
+  /api/v1/Question/{name}/answer:
+    post:
+      tags: ["Question"]
+      summary: "Answer the question"
+      operationId: "answerQuestion"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+        - name: "answers"
+          in: "body"
+          description: "Answers of the question"
+          required: true
+          schema: 
+            type: object
+            properties: 
+              answers: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    index: 
+                      type: number
+                      description: "index of questions that you get from /api/v1/Question/{name}"
+                    answer: 
+                      type: number
+                      description: "index of array of answers"
+      responses:
+        200:
+          description: "result of the answer"
+          schema: 
+            type: object
+            properties: 
+              personality_test_result:
+                type: string
+              compatible_person_description:
+                type: string
