@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.150.0/http/server.ts";
 import { Server } from "https://deno.land/x/socket_io@0.1.1/mod.ts";
-import { getFirstMessages, getOffset, initMessageTable ,addMessage} from "./src/dao.ts";
+import { getFirstMessages, getOffset, initMessageTable ,addMessage} from "./src/ChatDao.ts";
 
 await initMessageTable();
 const io = new Server({
