@@ -7,3 +7,15 @@ GET http://localhost:8000/api/v1/Question/names
 ###
 
 GET  http://localhost:8000/api/v1/Question/test1
+
+###
+
+POST http://localhost:8000/api/v1/Question/test1/answer
+
+Content-Type: application/json
+[
+    {index: 0, answer: 3},
+    {index: 1, answer: 2},
+    {index: 2, answer: 1},
+    {index: 3, answer: 0},
+]

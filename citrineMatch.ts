@@ -1,6 +1,8 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { Question } from "./src/QuestionDao.ts";
 import { QuestionsRow } from "./src/QuestionDao.ts";
+import { Answers } from "./src/QuestionDao.ts";
+import { answerQuestion } from "./src/QuestionDao.ts";
 
 
 const names = ["test1", "test2", "test3"];
@@ -12,9 +14,10 @@ const questions: QuestionsRow[] = [
 ];
 
 const router = new Router();
-router.get("/api/v1/Question/names", (ctx) => {
-    ctx.response.body = names;
-})
+router
+    .get("/api/v1/Question/names", (ctx) => {
+        ctx.response.body = names;
+    })
     .get("/api/v1/Question/:name", (ctx) => {
         const targetQuestion = Object.values(questions).find((question) => question.name === ctx.params.name)
         const body = {
@@ -25,6 +28,11 @@ router.get("/api/v1/Question/names", (ctx) => {
                 }
             })
         }
+        ctx.response.body = body;
+    })
+    .post("/api/v1/Question/:name/answer", async (ctx) => {
+        const answers = ctx.request.body;
+        const body = await answerQuestion(ctx.params.name, answers as unknown as Answers);
         ctx.response.body = body;
     });
 
