@@ -1,0 +1,9 @@
+# http://localhost:8000
+
+###
+
+GET http://localhost:8000/api/v1/Question/names
+
+###
+
+GET  http://localhost:8000/api/v1/Question/test1
